@@ -6,13 +6,14 @@ body {
   margin: 0;
 }
 
-
-/* .hidden {
+.window.hidden {
   display: none;
-} */
+} 
 
-.window {
+ .window {
   position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.5);
@@ -22,8 +23,62 @@ body {
   z-index: 1000;
 }
 
+form input {
+  height: 50%;
+  width: 80%;
+  font-size:  large;
+  border-color: black;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
 form {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
+}
+
+form button {
+  height: 50px;
+  width: 100px;
+  align-self: flex-end;
+  margin-top: 40%;
+  margin-right: 20px;    
+  margin-bottom: 20px;
+  color: white;
+  background-color: cornflowerblue;
+  border-radius: 8% 8% 8% 8%;
+}
+
+.event-adding-form h2, .participant-adding-form h2 {
+  color: cornflowerblue;
+  text-align: center;
+}
+
+.event-adding-form {
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  background-color: white;
+  height: 60%;
+  width: 35%;
+  border-radius: 8%;
+  position: relative;
+}
+
+.participant-adding-form {
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  background-color: white;
+  height: 60%;
+  width: 35%;
+  border-radius: 8%;
+  position: relative;
+}
+
+.close-button {
+  background-color: white;
+  border: none;
+  font-size: 25px;
+  position: absolute;   
+  top: 20px;               
+  right: 16px; 
 }
