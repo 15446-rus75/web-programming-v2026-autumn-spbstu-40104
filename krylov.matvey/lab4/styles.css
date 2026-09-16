@@ -74,7 +74,7 @@ form button {
   position: relative;
 }
 
-.close-button {
+.close-button-event-form, .close-button-participant-form {
   background-color: white;
   border: none;
   font-size: 25px;
