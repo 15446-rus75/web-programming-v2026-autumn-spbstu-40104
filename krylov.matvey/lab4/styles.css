@@ -82,3 +82,7 @@ form button {
   top: 20px;               
   right: 16px; 
 }
+
+.participant-list.hidden {
+  display: none;
+}
