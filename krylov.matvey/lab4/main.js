@@ -5,11 +5,9 @@ let events = [
 ];
 
 const listContainer = document.querySelector('[data-testid="entity-list"]');
-const addEventButton = document.querySelector('#add-event-button');
 const windowFormParticipant = document.querySelector(
   '#window-form-participant',
 );
-const windowFormEvent = document.querySelector('#window-form-event');
 const formEvent = document.querySelector('#event-form');
 const formParticipant = document.querySelector('#participant-form');
 
@@ -104,15 +102,6 @@ function render() {
   });
 }
 
-function openEventWindow() {
-  windowFormEvent.classList.remove('hidden');
-  formEvent.reset();
-}
-
-function closeEventWindow() {
-  windowFormEvent.classList.add('hidden');
-}
-
 function openParticipantWindow(eventID) {
   formParticipant.reset();
   formParticipant.querySelector('[name="eventID"]').value = eventID;
@@ -136,7 +125,6 @@ function addEventOnSubmitHandler(e) {
     events.push(newEvent);
     saveToLocalStorage();
     render();
-    closeEventWindow();
   });
 }
 
@@ -211,11 +199,6 @@ function cardListClickHandler(e) {
 
 formEvent.addEventListener('submit', addEventOnSubmitHandler);
 formParticipant.addEventListener('submit', addParticipantOnSubmitHandler);
-
-addEventButton.addEventListener('click', openEventWindow);
-windowFormEvent
-  .querySelector('.close-button-event-form')
-  .addEventListener('click', closeEventWindow);
 
 windowFormParticipant
   .querySelector('.close-button-participant-form')

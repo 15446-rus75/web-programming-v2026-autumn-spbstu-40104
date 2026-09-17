@@ -7,19 +7,15 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <button type="button" id="add-event-button">ДОБАВИТЬ МЕРОПРИЯТИЕ</button>
-
-    <div id="window-form-event" class="window hidden">
-      <div class="event-adding-form">
-        <button class="close-button-event-form" type="button">&times;</button>
-        <h2>ДОБАВИТЬ МЕРОПРИЯТИЕ</h2>
-        <form data-testid="entity-form" id="event-form">
-          <input type="number" name="id" placeholder="ID" required />
-          <input type="text" name="title" placeholder="НАЗВАНИЕ" required />
-          <input type="date" name="date" required />
-          <button type="submit">ДОБАВИТЬ</button>
-        </form>
-      </div>
+    <div class="event-adding-form">
+      <button class="close-button-event-form" type="button">&times;</button>
+      <h2>ДОБАВИТЬ МЕРОПРИЯТИЕ</h2>
+      <form data-testid="entity-form" id="event-form">
+        <input type="number" name="id" placeholder="ID" required />
+        <input type="text" name="title" placeholder="НАЗВАНИЕ" required />
+        <input type="date" name="date" required />
+        <button type="submit">ДОБАВИТЬ</button>
+      </form>
     </div>
 
     <div id="window-form-participant" class="window hidden">
