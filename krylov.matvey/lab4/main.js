@@ -1,8 +1,6 @@
 import {Event} from './model.js';
 
-let events = [
-  new Event(12, 'Дрочильня', ['Илья', 'Юра', 'Влад'], '10.10.2006'),
-];
+let events = [];
 
 const listContainer = document.querySelector('[data-testid="entity-list"]');
 const windowFormParticipant = document.querySelector(
