@@ -56,6 +56,7 @@ function render() {
     spreadListButton.type = 'button';
     spreadListButton.className = 'spread-participant-list-button';
     spreadListButton.textContent = `▸ Количество участников: ${event.participantCount}`;
+    spreadListButton.dataset.participantsCount = event.participantCount
     card.appendChild(spreadListButton);
 
     const participantList = document.createElement('ul');
@@ -69,10 +70,13 @@ function render() {
       event.participants.forEach(participant => {
         const element = document.createElement('li');
         element.textContent = participant;
+
         const deleteParticipantButton = document.createElement('button');
         deleteParticipantButton.type = 'button';
         deleteParticipantButton.textContent = 'X';
-        deleteParticipantButton.className = 'delete-participant';
+        deleteParticipantButton.className = 'delete-participant-button';
+        deleteParticipantButton.dataset.eventId = event.id;
+        deleteParticipantButton.dataset.name = participant;
         element.appendChild(deleteParticipantButton);
         participantList.appendChild(element);
       });
@@ -92,7 +96,6 @@ function render() {
     addParticipantButton.className = 'add-participant-button';
     addParticipantButton.textContent = '+ Участника';
     addParticipantButton.dataset.eventId = event.id;
-    addParticipantButton.dataset.name = participant;
     card.appendChild(addParticipantButton);
 
     listContainer.appendChild(card);
@@ -109,19 +112,143 @@ function closeEventWindow() {
   windowFormEvent.classList.add('hidden');
 }
 
-function openParticipantWindow() {
-  windowFormParticipant.classList.remove('hidden');
+function openParticipantWindow(eventID) {
   formParticipant.reset();
+  formParticipant.querySelector('[name="eventID"]').value = eventID;
+  windowFormParticipant.classList.remove('hidden');
 }
 
 function closeParticipantWindow() {
   windowFormParticipant.classList.add('hidden');
 }
 
+function addEventOnSubmitHandler(e) {
+  e.preventDefault();
 
+  const id = Number(formEvent.querySelector('[name="id"]').value);
+  const title = (formEvent.querySelector('[name="title"]').value);
+  const date = (formEvent.querySelector('[name="date"]').value);
+
+  const newEvent = new Event(id, title, [], date);
+
+  asyncAddEvent(newEvent).then(() => {
+    events.push(newEvent);
+    saveToLocalStorage();
+    render();
+    closeEventWindow();
+  })
+}
+
+function addParticipantOnSubmitHandler(e) {
+  e.preventDefault();
+
+  const name = (formParticipant.querySelector('[name="participantName"]').value);
+  const eventID = Number(formParticipant.querySelector('[name="eventID"]').value);
+
+  asyncAddParticipant(eventID, name).then(() => {
+    const targetEvent = events.find(event => event.id === eventID);
+    targetEvent.addParticipant(name);
+    saveToLocalStorage();
+    closeParticipantWindow();
+    render();
+  })
+}
+
+function cardListClickHandler(e) {
+  const deleteEventButton = e.target.closest('.delete-event-button');
+  if (deleteEventButton) {
+    const eventID = Number(deleteEventButton.dataset.eventId);
+    
+    asyncDeleteEvent(eventID).then(() => {
+      events = events.filter(event => event.id !== eventID);
+      saveToLocalStorage();
+      render();
+    });
+    return;
+  }
+
+  const addParticipantButton = e.target.closest('.add-participant-button');
+  if (addParticipantButton) {
+    openParticipantWindow(Number(addParticipantButton.dataset.eventId));
+    return;
+  }
+
+  const spreadParticipantsButton = e.target.closest('.spread-participant-list-button');
+  if (spreadParticipantsButton) {
+    const card = spreadParticipantsButton.closest('.event-card');
+    const ul = card.querySelector('.participant-list');
+    ul.classList.toggle('hidden');
+    const isHidden = ul.classList.contains('hidden');
+    if (isHidden) {
+      spreadParticipantsButton.textContent = `▸ Количество участников: ${spreadParticipantsButton.dataset.participantsCount}`;
+    } else {
+      spreadParticipantsButton.textContent = `▾ Количество участников: ${spreadParticipantsButton.dataset.participantsCount}`;
+    }
+    return;
+  }
+
+  const deleteParticipantButton = e.target.closest('.delete-participant-button');
+  if (deleteParticipantButton) {
+    const eventID = Number(deleteParticipantButton.dataset.eventId);
+    const name = deleteParticipantButton.dataset.name;
+
+    asyncDeleteParticipant(eventID, name).then(() => {
+      const targetEvent = events.find(event => event.id === eventID);
+      targetEvent.removeParticipant(name);
+      saveToLocalStorage();
+      render();
+    })
+    return;
+  }
+}
+
+formEvent.addEventListener('submit', addEventOnSubmitHandler);
+formParticipant.addEventListener('submit', addParticipantOnSubmitHandler)
 
 addEventButton.addEventListener('click', openEventWindow);
-document.querySelector('.close-button-event-form').addEventListener('click', closeEventWindow);
+windowFormEvent.querySelector('.close-button-event-form').addEventListener('click', closeEventWindow);
+
+listContainer.addEventListener('click', cardListClickHandler);
+
+
+
+
+function asyncAddEvent(newEvent) {
+  return new Promise(resolve => {
+    setTimeout(() => {resolve(newEvent)}, 400);
+  });
+}
+
+function asyncAddParticipant(eventID, newName) {
+  return new Promise(resolve => {
+    setTimeout(() => {resolve(eventID, newName)}, 400);
+  });
+}
+
+function asyncDeleteEvent(eventID) {
+  return new Promise(resolve => {
+    setTimeout(() => {resolve(eventID)}, 400);
+  });
+}
+
+function asyncDeleteParticipant(eventID, name) {
+  return new Promise(resolve => {
+    setTimeout(() => {resolve(eventID, name)}, 400);
+  });
+}
+
+
+
+loadFromLocalStorage();
 render();
+
+
+
+
+
+
+
+
+
 
 
