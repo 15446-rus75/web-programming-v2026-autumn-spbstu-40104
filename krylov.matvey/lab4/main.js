@@ -1,10 +1,14 @@
-import { Event } from './model.js';
+import {Event} from './model.js';
 
-let events = [new Event(12, 'Дрочильня', ['Илья', 'Юра', 'Влад'], '10.10.2006')];
+let events = [
+  new Event(12, 'Дрочильня', ['Илья', 'Юра', 'Влад'], '10.10.2006'),
+];
 
 const listContainer = document.querySelector('[data-testid="entity-list"]');
 const addEventButton = document.querySelector('#add-event-button');
-const windowFormParticipant = document.querySelector('#window-form-participant');
+const windowFormParticipant = document.querySelector(
+  '#window-form-participant',
+);
 const windowFormEvent = document.querySelector('#window-form-event');
 const formEvent = document.querySelector('#event-form');
 const formParticipant = document.querySelector('#participant-form');
@@ -20,12 +24,10 @@ function loadFromLocalStorage() {
     return;
   }
   const parsed = JSON.parse(rawEvents);
-  events = parsed.map(item => new Event(
-    item.id,
-    item.title,
-    item.participants || [],
-    item.date
-  ));
+  events = parsed.map(
+    (item) =>
+      new Event(item.id, item.title, item.participants || [], item.date),
+  );
 }
 
 function render() {
@@ -38,7 +40,7 @@ function render() {
     return;
   }
 
-  events.forEach(event => {
+  events.forEach((event) => {
     const card = document.createElement('div');
     card.className = 'event-card';
     card.dataset.testid = 'entity-card';
@@ -56,7 +58,7 @@ function render() {
     spreadListButton.type = 'button';
     spreadListButton.className = 'spread-participant-list-button';
     spreadListButton.textContent = `▸ Количество участников: ${event.participantCount}`;
-    spreadListButton.dataset.participantsCount = event.participantCount
+    spreadListButton.dataset.participantsCount = event.participantCount;
     card.appendChild(spreadListButton);
 
     const participantList = document.createElement('ul');
@@ -67,7 +69,7 @@ function render() {
       emptyElement.textContent = 'Нет участников';
       participantList.appendChild(emptyElement);
     } else {
-      event.participants.forEach(participant => {
+      event.participants.forEach((participant) => {
         const element = document.createElement('li');
         element.textContent = participant;
 
@@ -102,7 +104,6 @@ function render() {
   });
 }
 
-
 function openEventWindow() {
   windowFormEvent.classList.remove('hidden');
   formEvent.reset();
@@ -126,8 +127,8 @@ function addEventOnSubmitHandler(e) {
   e.preventDefault();
 
   const id = Number(formEvent.querySelector('[name="id"]').value);
-  const title = (formEvent.querySelector('[name="title"]').value);
-  const date = (formEvent.querySelector('[name="date"]').value);
+  const title = formEvent.querySelector('[name="title"]').value;
+  const date = formEvent.querySelector('[name="date"]').value;
 
   const newEvent = new Event(id, title, [], date);
 
@@ -136,31 +137,33 @@ function addEventOnSubmitHandler(e) {
     saveToLocalStorage();
     render();
     closeEventWindow();
-  })
+  });
 }
 
 function addParticipantOnSubmitHandler(e) {
   e.preventDefault();
 
-  const name = (formParticipant.querySelector('[name="participantName"]').value);
-  const eventID = Number(formParticipant.querySelector('[name="eventID"]').value);
+  const name = formParticipant.querySelector('[name="participantName"]').value;
+  const eventID = Number(
+    formParticipant.querySelector('[name="eventID"]').value,
+  );
 
   asyncAddParticipant(eventID, name).then(() => {
-    const targetEvent = events.find(event => event.id === eventID);
+    const targetEvent = events.find((event) => event.id === eventID);
     targetEvent.addParticipant(name);
     saveToLocalStorage();
     closeParticipantWindow();
     render();
-  })
+  });
 }
 
 function cardListClickHandler(e) {
   const deleteEventButton = e.target.closest('.delete-event-button');
   if (deleteEventButton) {
     const eventID = Number(deleteEventButton.dataset.eventId);
-    
+
     asyncDeleteEvent(eventID).then(() => {
-      events = events.filter(event => event.id !== eventID);
+      events = events.filter((event) => event.id !== eventID);
       saveToLocalStorage();
       render();
     });
@@ -173,7 +176,9 @@ function cardListClickHandler(e) {
     return;
   }
 
-  const spreadParticipantsButton = e.target.closest('.spread-participant-list-button');
+  const spreadParticipantsButton = e.target.closest(
+    '.spread-participant-list-button',
+  );
   if (spreadParticipantsButton) {
     const card = spreadParticipantsButton.closest('.event-card');
     const ul = card.querySelector('.participant-list');
@@ -187,68 +192,68 @@ function cardListClickHandler(e) {
     return;
   }
 
-  const deleteParticipantButton = e.target.closest('.delete-participant-button');
+  const deleteParticipantButton = e.target.closest(
+    '.delete-participant-button',
+  );
   if (deleteParticipantButton) {
     const eventID = Number(deleteParticipantButton.dataset.eventId);
     const name = deleteParticipantButton.dataset.name;
 
     asyncDeleteParticipant(eventID, name).then(() => {
-      const targetEvent = events.find(event => event.id === eventID);
+      const targetEvent = events.find((event) => event.id === eventID);
       targetEvent.removeParticipant(name);
       saveToLocalStorage();
       render();
-    })
+    });
     return;
   }
 }
 
 formEvent.addEventListener('submit', addEventOnSubmitHandler);
-formParticipant.addEventListener('submit', addParticipantOnSubmitHandler)
+formParticipant.addEventListener('submit', addParticipantOnSubmitHandler);
 
 addEventButton.addEventListener('click', openEventWindow);
-windowFormEvent.querySelector('.close-button-event-form').addEventListener('click', closeEventWindow);
+windowFormEvent
+  .querySelector('.close-button-event-form')
+  .addEventListener('click', closeEventWindow);
+
+windowFormParticipant
+  .querySelector('.close-button-participant-form')
+  .addEventListener('click', closeParticipantWindow);
 
 listContainer.addEventListener('click', cardListClickHandler);
 
-
-
-
 function asyncAddEvent(newEvent) {
-  return new Promise(resolve => {
-    setTimeout(() => {resolve(newEvent)}, 400);
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(newEvent);
+    }, 400);
   });
 }
 
 function asyncAddParticipant(eventID, newName) {
-  return new Promise(resolve => {
-    setTimeout(() => {resolve(eventID, newName)}, 400);
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(eventID, newName);
+    }, 400);
   });
 }
 
 function asyncDeleteEvent(eventID) {
-  return new Promise(resolve => {
-    setTimeout(() => {resolve(eventID)}, 400);
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(eventID);
+    }, 400);
   });
 }
 
 function asyncDeleteParticipant(eventID, name) {
-  return new Promise(resolve => {
-    setTimeout(() => {resolve(eventID, name)}, 400);
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(eventID, name);
+    }, 400);
   });
 }
 
-
-
 loadFromLocalStorage();
 render();
-
-
-
-
-
-
-
-
-
-
-

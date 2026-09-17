@@ -11,12 +11,12 @@
 
     <div id="window-form-event" class="window hidden">
       <div class="event-adding-form">
-        <button class="close-button-event-form" type="button">&times</button>
+        <button class="close-button-event-form" type="button">&times;</button>
         <h2>ДОБАВИТЬ МЕРОПРИЯТИЕ</h2>
         <form data-testid="entity-form" id="event-form">
-          <input type="number" name="id" placeholder="ID" required>
-          <input type="text" name="title" placeholder="НАЗВАНИЕ" required>
-          <input type="date" name="date" placeholder="Дата мероприятия" required>
+          <input type="number" name="id" placeholder="ID" required />
+          <input type="text" name="title" placeholder="НАЗВАНИЕ" required />
+          <input type="date" name="date" required />
           <button type="submit">ДОБАВИТЬ</button>
         </form>
       </div>
@@ -24,11 +24,23 @@
 
     <div id="window-form-participant" class="window hidden">
       <div class="participant-adding-form">
-        <button class="close-button-participant-form" type="button">&times</button>
+        <button class="close-button-participant-form" type="button">
+          &times;
+        </button>
         <h2>ДОБАВИТЬ УЧАСТНИКА</h2>
         <form id="participant-form">
-          <input type="number" name="eventID" placeholder="ID мероприятия" readonly>
-          <input type="text" name="participantName" placeholder="ИМЯ УЧАСТНИКА" required>
+          <input
+            type="number"
+            name="eventID"
+            placeholder="ID мероприятия"
+            readonly
+          />
+          <input
+            type="text"
+            name="participantName"
+            placeholder="ИМЯ УЧАСТНИКА"
+            required
+          />
           <button type="submit">ДОБАВИТЬ</button>
         </form>
       </div>

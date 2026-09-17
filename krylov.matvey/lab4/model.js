@@ -11,7 +11,7 @@ export class Event {
   }
 
   removeParticipant(name) {
-    const index = this.participants.indexOf(name)
+    const index = this.participants.indexOf(name);
     if (index >= 0) {
       this.participants.splice(index, 1);
     }
@@ -20,7 +20,7 @@ export class Event {
   get participantCount() {
     return this.participants.length;
   }
-};
+}
 
 export function groupEventsByDate(events) {
   const groupedEvents = new Map();
@@ -47,7 +47,7 @@ export function groupEventsByParticipantCount(events) {
 export function getUniqueParticipants(events) {
   const uniqueParticipants = new Set();
   for (let i = 0; i < events.length; i++) {
-    let eventParticipants = events[i].participants;
+    const eventParticipants = events[i].participants;
     for (let j = 0; j < eventParticipants.length; j++) {
       uniqueParticipants.add(eventParticipants[j]);
     }
