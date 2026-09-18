@@ -1,5 +1,6 @@
 * {
   box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 body {
@@ -28,44 +29,68 @@ form input {
   width: 80%;
   font-size: large;
   border-color: black;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   margin-top: 5px;
   margin-bottom: 5px;
   border-width: 1.5px;
   border-style: solid;
+  min-width: 100px;
 }
 
-form {
+.event-adding-form form {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.participant-adding-form form {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-form button {
+.participant-adding-form button[type='submit'] {
   height: 50px;
   width: 100px;
   align-self: flex-end;
   margin-top: 40%;
-  margin-right: 20px;
+  margin-right: 25px;
   margin-bottom: 20px;
   color: white;
   background-color: cornflowerblue;
   border-radius: 8%;
+  border-style: none;
 }
 
-.event-adding-form h2,
+.event-adding-form button {
+  height: 50px;
+  width: auto;
+  padding: 0 24px;
+  color: white;
+  background-color: cornflowerblue;
+  border-style: none;
+  border-radius: 8%;
+  cursor: pointer;
+}
+
+main h2,
+.event-adding-form h2 {
+  color: cornflowerblue;
+  text-align: center;
+  margin: 0 0 16px;
+}
+
 .participant-adding-form h2 {
   color: cornflowerblue;
   text-align: center;
+  margin: 23px 0 16px;
 }
 
 .event-adding-form {
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   background-color: white;
-  height: 60%;
-  width: 35%;
-  border-radius: 8%;
-  position: relative;
+  height: 150px;
+  width: 100%;
+  padding: 20px;
 }
 
 .participant-adding-form {
@@ -77,7 +102,6 @@ form button {
   position: relative;
 }
 
-.close-button-event-form,
 .close-button-participant-form {
   background-color: white;
   border: none;
@@ -89,4 +113,83 @@ form button {
 
 .participant-list.hidden {
   display: none;
+}
+
+main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+section {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.event-card {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.event-card h3 {
+  margin: 0 0 8px;
+  font-size: 18px;
+}
+
+.participant-list {
+  list-style: none;
+  padding: 0;
+  margin: 8px 0;
+  max-height: 60px;
+  overflow-y: auto;
+}
+
+.participant-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 0;
+  border-bottom: 1px solid #eee;
+  font-size: 14px;
+}
+
+.delete-event-button,
+.delete-participant-button,
+.add-participant-button {
+  cursor: pointer;
+  border: none;
+  border-radius: 4px;
+  padding: 6px 10px;
+  font-size: 14px;
+}
+
+.delete-event-button {
+  background: #ffcdd2;
+  color: #b71c1c;
+}
+
+.add-participant-button {
+  background: #e3f2fd;
+  color: #0d47a1;
+  margin-left: 10px;
+}
+
+.delete-participant-button {
+  background: none;
+  color: #d32f2f;
+  padding: 0 4px;
+}
+
+.spread-participant-list-button {
+  background: none;
+  border: none;
+  color: cornflowerblue;
+  cursor: pointer;
+  font-size: 15px;
+  padding: 6px 0;
+  text-align: left;
+  width: 100%;
 }

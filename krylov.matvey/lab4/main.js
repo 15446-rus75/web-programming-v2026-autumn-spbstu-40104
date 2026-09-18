@@ -122,6 +122,7 @@ function addEventOnSubmitHandler(e) {
   asyncAddEvent(newEvent).then(() => {
     events.push(newEvent);
     saveToLocalStorage();
+    formEvent.reset();
     render();
   });
 }
