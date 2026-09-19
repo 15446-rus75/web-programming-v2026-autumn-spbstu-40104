@@ -54,6 +54,7 @@ form input {
   align-self: flex-end;
   margin-top: 40%;
   margin-right: 25px;
+  cursor: pointer;
   margin-bottom: 20px;
   color: white;
   background-color: cornflowerblue;
@@ -104,6 +105,7 @@ main h2,
 
 .close-button-participant-form {
   background-color: white;
+  cursor: pointer;
   border: none;
   font-size: 25px;
   position: absolute;
@@ -116,7 +118,6 @@ main h2,
 }
 
 main {
-  max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
 }
@@ -128,21 +129,29 @@ section {
 }
 
 .event-card {
+  display: flex;
+  flex-direction: column;
   background: white;
-  border: 1px solid #ddd;
+  border: 1.5px solid #ddd;
   border-radius: 8px;
   padding: 16px;
+  min-height: 300px;
 }
 
 .event-card h3 {
   margin: 0 0 8px;
-  font-size: 18px;
+  font-size: 20px;
+}
+
+.event-card p {
+  color: rgb(110 115 116);
+  font-size: 14px;
 }
 
 .participant-list {
   list-style: none;
   padding: 0;
-  margin: 8px 0;
+  margin: 2px 0;
   max-height: 60px;
   overflow-y: auto;
 }
@@ -151,7 +160,7 @@ section {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 4px 0;
+  padding: 3px 0;
   border-bottom: 1px solid #eee;
   font-size: 14px;
 }
@@ -166,20 +175,24 @@ section {
   font-size: 14px;
 }
 
+.action-section-card {
+  margin-top: auto;
+}
+
 .delete-event-button {
-  background: #ffcdd2;
-  color: #b71c1c;
+  background: rgb(255 180 180);
+  color: rgb(198 49 49);
 }
 
 .add-participant-button {
-  background: #e3f2fd;
-  color: #0d47a1;
+  background: rgb(150 187 255);
+  color: white;
   margin-left: 10px;
 }
 
 .delete-participant-button {
   background: none;
-  color: #d32f2f;
+  color: red;
   padding: 0 4px;
 }
 
@@ -192,4 +205,17 @@ section {
   padding: 6px 0;
   text-align: left;
   width: 100%;
+}
+
+button[type='submit']:hover {
+  background-color: rgb(41 75 249);
+}
+
+.add-participant-button:hover {
+  background-color: rgb(71 101 250);
+}
+
+.delete-participant-button:hover,
+.delete-event-button:hover {
+  background-color: rgb(127 47 47);
 }

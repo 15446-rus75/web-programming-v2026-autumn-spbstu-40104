@@ -71,7 +71,7 @@ function render() {
 
         const deleteParticipantButton = document.createElement('button');
         deleteParticipantButton.type = 'button';
-        deleteParticipantButton.textContent = 'X';
+        deleteParticipantButton.textContent = '×';
         deleteParticipantButton.className = 'delete-participant-button';
         deleteParticipantButton.dataset.eventId = event.id;
         deleteParticipantButton.dataset.name = participant;
@@ -81,21 +81,25 @@ function render() {
     }
     card.appendChild(participantList);
 
+    const actionSection = document.createElement('div');
+    actionSection.className = 'action-section-card';
+
     const deleteEventButton = document.createElement('button');
     deleteEventButton.type = 'button';
     deleteEventButton.className = 'delete-event-button';
     deleteEventButton.textContent = '🗑';
     deleteEventButton.dataset.eventId = event.id;
     deleteEventButton.dataset.testid = 'delete-entity';
-    card.appendChild(deleteEventButton);
+    actionSection.appendChild(deleteEventButton);
 
     const addParticipantButton = document.createElement('button');
     addParticipantButton.type = 'button';
     addParticipantButton.className = 'add-participant-button';
     addParticipantButton.textContent = '+ Участника';
     addParticipantButton.dataset.eventId = event.id;
-    card.appendChild(addParticipantButton);
+    actionSection.appendChild(addParticipantButton);
 
+    card.appendChild(actionSection);
     listContainer.appendChild(card);
   });
 }
@@ -116,6 +120,16 @@ function addEventOnSubmitHandler(e) {
   const id = Number(formEvent.querySelector('[name="id"]').value);
   const title = formEvent.querySelector('[name="title"]').value;
   const date = formEvent.querySelector('[name="date"]').value;
+
+  if (events.find((event) => event.id === id)) {
+    alert('Ошибка: Такой ID уже существует!');
+    return;
+  }
+
+  if (title.length > 60) {
+    alert('Ошибка: Название мероприятия слишком длинное');
+    return;
+  }
 
   const newEvent = new Event(id, title, [], date);
 
