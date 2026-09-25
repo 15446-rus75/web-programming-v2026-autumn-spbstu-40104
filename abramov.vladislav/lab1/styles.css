@@ -13,7 +13,7 @@ main {
   max-width: 100%;
   margin: 0 auto;
   padding: 8px;
-  background: #ffffff;
+  background: #fff;
   border: 1px solid #e1e4e8;
 }
 
@@ -35,7 +35,7 @@ main {
   padding: 10px 12px;
   border: 0;
   background: #0056ff;
-  color: #ffffff;
+  color: #fff;
   cursor: pointer;
 }
 
