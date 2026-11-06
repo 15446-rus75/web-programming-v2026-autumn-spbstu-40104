@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { createRoot } from 'react-dom/client';
+import React, {useState} from 'react';
+import {createRoot} from 'react-dom/client';
 import './styles.css';
 
 const BOOKS = [
@@ -71,18 +71,21 @@ const FIELD_LABELS = {
   rating: 'Рейтинг',
 };
 
-function BookCard({ book }) {
+function BookCard({book}) {
   const fullStars = Math.round(book.rating);
   return (
     <div className="book-card" data-testid="book-card">
-      <div className="book-cover" style={{ background: book.color }}>
+      <div className="book-cover" style={{background: book.color}}>
         <span className="cover-emoji">{book.emoji}</span>
       </div>
       <div className="book-info">
         <h3 className="book-title">{book.title}</h3>
         <div className="book-author">{book.author}</div>
         <div className="book-rating">
-          <span className="stars">{'★'.repeat(fullStars)}{'☆'.repeat(5 - fullStars)}</span>
+          <span className="stars">
+            {'★'.repeat(fullStars)}
+            {'☆'.repeat(5 - fullStars)}
+          </span>
           <span className="rating-number">{book.rating}</span>
         </div>
         <p className="book-description">{book.description}</p>
@@ -127,13 +130,15 @@ function App() {
   };
 
   const arrow = sortOrder === 'asc' ? '↑' : sortOrder === 'desc' ? '↓' : '';
-  const directionText = sortField ? `${FIELD_LABELS[sortField]} ${arrow}` : 'не задана';
+  const directionText = sortField
+    ? `${FIELD_LABELS[sortField]} ${arrow}`
+    : 'не задана';
   const sortedBooks = getSortedBooks();
 
   const sortButtons = [
-    { field: 'title', testId: 'sort-title', label: 'Название' },
-    { field: 'price', testId: 'sort-price', label: 'Цена' },
-    { field: 'rating', testId: 'sort-rating', label: 'Рейтинг' },
+    {field: 'title', testId: 'sort-title', label: 'Название'},
+    {field: 'price', testId: 'sort-price', label: 'Цена'},
+    {field: 'rating', testId: 'sort-rating', label: 'Рейтинг'},
   ];
 
   return (
@@ -142,7 +147,7 @@ function App() {
 
       <div className="sort-panel">
         <span className="sort-label">Сортировать по:</span>
-        {sortButtons.map(({ field, testId, label }) => (
+        {sortButtons.map(({field, testId, label}) => (
           <button
             key={field}
             data-testid={testId}
@@ -152,7 +157,9 @@ function App() {
           >
             {label}
             {sortField === field && sortOrder && (
-              <span className="sort-arrow">{sortOrder === 'asc' ? ' ↑' : ' ↓'}</span>
+              <span className="sort-arrow">
+                {sortOrder === 'asc' ? ' ↑' : ' ↓'}
+              </span>
             )}
           </button>
         ))}
