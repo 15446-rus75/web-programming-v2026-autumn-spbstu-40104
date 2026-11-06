@@ -35,7 +35,6 @@
 
 Установка зависимостей: npm install
 
-npm run build
-npm run dev / npm run preview
+npm run build npm run dev / npm run preview
 
 Открыть в браузере адрес `http://localhost:5173` / `http://localhost:4173`.
