@@ -1,0 +1,169 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: system-ui, sans-serif;
+  background: #f5f5f5;
+  color: #333;
+  line-height: 1.6;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+h1 {
+  margin-bottom: 30px;
+  color: #2c3e50;
+  text-align: center;
+}
+
+h2 {
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #3498db;
+  color: #34495e;
+}
+
+.section {
+  margin-bottom: 20px;
+  padding: 20px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgb(0 0 0 / 0.1);
+}
+
+.form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.form input,
+.form select {
+  flex: 1;
+  min-width: 150px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.form input:focus,
+.form select:focus {
+  outline: 0;
+  border-color: #3498db;
+}
+
+.form button {
+  padding: 10px 20px;
+  background: #3498db;
+  border: 0;
+  border-radius: 4px;
+  color: #fff;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.form button:hover {
+  background: #2980b9;
+}
+
+.books-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 15px;
+}
+
+.book-card {
+  padding: 15px;
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  transition: box-shadow 0.2s;
+}
+
+.book-card:hover {
+  box-shadow: 0 4px 8px rgb(0 0 0 / 0.15);
+}
+
+.book-card h4 {
+  margin-bottom: 8px;
+  color: #2c3e50;
+  font-size: 16px;
+}
+
+.book-card p {
+  margin-bottom: 5px;
+  color: #555;
+  font-size: 14px;
+}
+
+.book-card strong {
+  color: #333;
+}
+
+.books-inside {
+  margin: 15px 0;
+  padding-top: 10px;
+  border-top: 1px solid #ecf0f1;
+}
+
+.book-item {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  padding: 8px;
+  margin-bottom: 5px;
+  background: #f8f9fa;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.book-item > div {
+  flex: 1;
+  min-width: 200px;
+}
+
+.delete-btn {
+  margin-top: 10px;
+  padding: 8px 15px;
+  background: #e74c3c;
+  border: 0;
+  border-radius: 4px;
+  color: #fff;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.delete-book-btn {
+  margin-top: 0;
+  padding: 5px 10px;
+  background: #e74c3c;
+  border: 0;
+  border-radius: 4px;
+  color: #fff;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.delete-btn:hover,
+.delete-book-btn:hover {
+  background: #c0392b;
+}
+
+.empty-state {
+  grid-column: 1 / -1;
+  padding: 40px;
+  color: #95a5a6;
+  font-style: italic;
+  text-align: center;
+}
