@@ -1,4 +1,4 @@
-import { Book, Library } from './model.js';
+import {Book, Library} from './model.js';
 
 const STORAGE_KEY = 'libraryData';
 const ASYNC_DELAY = 500;
@@ -19,7 +19,7 @@ function load() {
       libraries = parsed.libraries.map((lib) => {
         const library = new Library(lib.name);
         library.books = lib.books.map(
-          (b) => new Book(b.title, b.author, b.year, b.genre)
+          (b) => new Book(b.title, b.author, b.year, b.genre),
         );
         return library;
       });
@@ -34,10 +34,14 @@ function load() {
 function getDefaults() {
   const city = new Library('Городская библиотека');
   city.addBook(new Book('Война и мир', 'Лев Толстой', 1869, 'Роман'));
-  city.addBook(new Book('Преступление и наказание', 'Фёдор Достоевский', 1866, 'Роман'));
+  city.addBook(
+    new Book('Преступление и наказание', 'Фёдор Достоевский', 1866, 'Роман'),
+  );
 
   const university = new Library('Университетская библиотека');
-  university.addBook(new Book('Гарри Поттер', 'Дж. К. Роулинг', 1997, 'Фэнтези'));
+  university.addBook(
+    new Book('Гарри Поттер', 'Дж. К. Роулинг', 1997, 'Фэнтези'),
+  );
   university.addBook(new Book('1984', 'Джордж Оруэлл', 1949, 'Антиутопия'));
 
   return [city, university];
@@ -68,7 +72,8 @@ function renderLibraries() {
   container.innerHTML = '';
 
   if (libraries.length === 0) {
-    container.innerHTML = '<p class="empty-state">Нет библиотек. Добавьте первую!</p>';
+    container.innerHTML =
+      '<p class="empty-state">Нет библиотек. Добавьте первую!</p>';
     return;
   }
 
@@ -88,7 +93,7 @@ function renderLibraries() {
             Удалить книгу
           </button>
         </div>
-      `
+      `,
       )
       .join('');
 
@@ -172,8 +177,8 @@ function setup() {
           formData.get('title'),
           formData.get('author'),
           formData.get('year'),
-          formData.get('genre')
-        )
+          formData.get('genre'),
+        ),
       );
     });
     e.target.reset();

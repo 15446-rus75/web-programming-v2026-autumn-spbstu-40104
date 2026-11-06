@@ -36,7 +36,7 @@ export function groupBooksByGenre(libraries) {
       if (!genreMap.has(book.genre)) {
         genreMap.set(book.genre, []);
       }
-      genreMap.get(book.genre).push({ ...book });
+      genreMap.get(book.genre).push({...book});
     }
   }
   return genreMap;
@@ -59,7 +59,7 @@ export function groupBooksByYear(libraries) {
       if (!yearMap.has(book.year)) {
         yearMap.set(book.year, []);
       }
-      yearMap.get(book.year).push({ ...book });
+      yearMap.get(book.year).push({...book});
     }
   }
   return yearMap;
@@ -80,7 +80,7 @@ export function findBooksByAuthor(libraries, author) {
   for (const library of libraries) {
     for (const book of library.books) {
       if (book.author === author) {
-        result.push({ ...book });
+        result.push({...book});
       }
     }
   }
