@@ -1,42 +1,88 @@
 export class Book {
   constructor(title, author, year, genre) {
-    Object.assign(this, {title, author, year: +year, genre});
+    this.title = title;
+    this.author = author;
+    this.year = Number(year);
+    this.genre = genre;
   }
 }
 
 export class Library {
-  constructor(name, books = []) {
+  constructor(name) {
     this.name = name;
-    this.books = books;
+    this.books = [];
   }
+
   addBook(book) {
     this.books.push(book);
   }
+
   removeBook(title) {
-    const i = this.books.findIndex((b) => b.title === title);
-    i >= 0 && this.books.splice(i, 1);
+    const index = this.books.findIndex((b) => b.title === title);
+    if (index !== -1) {
+      this.books.splice(index, 1);
+    }
   }
+
   get booksCount() {
     return this.books.length;
   }
 }
 
-const group = (libs, key) =>
-  libs.reduce((m, lib) => {
-    lib.books.forEach((b) => (m[b[key]] ??= []).push({...b}));
-    return m;
-  }, {});
+export function groupBooksByGenre(libraries) {
+  const genreMap = new Map();
+  for (const library of libraries) {
+    for (const book of library.books) {
+      if (!genreMap.has(book.genre)) {
+        genreMap.set(book.genre, []);
+      }
+      genreMap.get(book.genre).push({ ...book });
+    }
+  }
+  return genreMap;
+}
 
-export const groupBooksByGenre = (libs) =>
-  new Map(Object.entries(group(libs, 'genre')));
-export const groupBooksByYear = (libs) =>
-  new Map(Object.entries(group(libs, 'year')));
-export const getUniqueAuthors = (libs) => [
-  ...new Set(libs.flatMap((l) => l.books.map((b) => b.author))),
-];
-export const getUniqueYears = (libs) =>
-  [...new Set(libs.flatMap((l) => l.books.map((b) => b.year)))].sort(
-    (a, b) => a - b,
-  );
-export const getBooksByAuthor = (libs, author) =>
-  libs.flatMap((l) => l.books.filter((b) => b.author === author));
+export function getUniqueAuthors(libraries) {
+  const authors = new Set();
+  for (const library of libraries) {
+    for (const book of library.books) {
+      authors.add(book.author);
+    }
+  }
+  return Array.from(authors);
+}
+
+export function groupBooksByYear(libraries) {
+  const yearMap = new Map();
+  for (const library of libraries) {
+    for (const book of library.books) {
+      if (!yearMap.has(book.year)) {
+        yearMap.set(book.year, []);
+      }
+      yearMap.get(book.year).push({ ...book });
+    }
+  }
+  return yearMap;
+}
+
+export function getUniqueYears(libraries) {
+  const years = new Set();
+  for (const library of libraries) {
+    for (const book of library.books) {
+      years.add(book.year);
+    }
+  }
+  return Array.from(years).sort((a, b) => a - b);
+}
+
+export function findBooksByAuthor(libraries, author) {
+  const result = [];
+  for (const library of libraries) {
+    for (const book of library.books) {
+      if (book.author === author) {
+        result.push({ ...book });
+      }
+    }
+  }
+  return result;
+}

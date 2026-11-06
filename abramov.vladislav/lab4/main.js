@@ -1,8 +1,9 @@
-import {Book, Library} from './model.js';
+import { Book, Library } from './model.js';
 
-const KEY = 'libraryData',
-  DELAY = 500;
-let libs = [];
+const STORAGE_KEY = 'libraryData';
+const ASYNC_DELAY = 500;
+
+let libraries = [];
 
 document.addEventListener('DOMContentLoaded', () => {
   load();
@@ -11,148 +12,181 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function load() {
-  const d = localStorage.getItem(KEY);
-  if (d) {
+  const saved = localStorage.getItem(STORAGE_KEY);
+  if (saved) {
     try {
-      const p = JSON.parse(d);
-      libs = p.libraries.map((l) => {
-        const lib = new Library(l.name);
-        lib.books = l.books.map(
-          (b) => new Book(b.title, b.author, b.year, b.genre),
+      const parsed = JSON.parse(saved);
+      libraries = parsed.libraries.map((lib) => {
+        const library = new Library(lib.name);
+        library.books = lib.books.map(
+          (b) => new Book(b.title, b.author, b.year, b.genre)
         );
-        return lib;
+        return library;
       });
     } catch {
-      libs = defaults();
+      libraries = getDefaults();
     }
-  } else libs = defaults();
+  } else {
+    libraries = getDefaults();
+  }
 }
 
-function defaults() {
-  const l1 = new Library('Городская');
-  l1.addBook(new Book('Война и мир', 'Толстой', 1869, 'Роман'));
-  l1.addBook(new Book('Преступление', 'Достоевский', 1866, 'Роман'));
-  const l2 = new Library('Университетская');
-  l2.addBook(new Book('Гарри Поттер', 'Роулинг', 1997, 'Фэнтези'));
-  l2.addBook(new Book('1984', 'Оруэлл', 1949, 'Антиутопия'));
-  return [l1, l2];
+function getDefaults() {
+  const city = new Library('Городская библиотека');
+  city.addBook(new Book('Война и мир', 'Лев Толстой', 1869, 'Роман'));
+  city.addBook(new Book('Преступление и наказание', 'Фёдор Достоевский', 1866, 'Роман'));
+
+  const university = new Library('Университетская библиотека');
+  university.addBook(new Book('Гарри Поттер', 'Дж. К. Роулинг', 1997, 'Фэнтези'));
+  university.addBook(new Book('1984', 'Джордж Оруэлл', 1949, 'Антиутопия'));
+
+  return [city, university];
 }
 
 function save() {
-  localStorage.setItem(
-    KEY,
-    JSON.stringify({
-      libraries: libs.map((l) => ({
-        name: l.name,
-        books: l.books.map((b) => ({
-          title: b.title,
-          author: b.author,
-          year: b.year,
-          genre: b.genre,
-        })),
+  const data = {
+    libraries: libraries.map((lib) => ({
+      name: lib.name,
+      books: lib.books.map((b) => ({
+        title: b.title,
+        author: b.author,
+        year: b.year,
+        genre: b.genre,
       })),
-    }),
-  );
-}
-
-function renderLibs() {
-  const c = document.getElementById('libraries-container');
-  c.innerHTML = '';
-  if (!libs.length) {
-    c.innerHTML = '<p class="empty-state">Нет библиотек</p>';
-    return;
-  }
-  libs.forEach((lib, i) => {
-    const d = document.createElement('div');
-    d.className = 'library-card';
-    d.innerHTML = `<h3>${lib.name}</h3><p>Книг: ${lib.booksCount}</p><button class="delete-btn">Удалить</button>`;
-    c.appendChild(d);
-    d.querySelector('.delete-btn').onclick = () =>
-      asyncOp(() => libs.splice(i, 1));
-  });
-}
-
-function renderBooks() {
-  const c = document.querySelector('[data-testid="entity-list"]');
-  c.innerHTML = '';
-  const all = libs.flatMap((l) => l.books.map((b) => ({...b, lib: l.name})));
-  if (!all.length) {
-    c.innerHTML = '<p class="empty-state">Нет книг</p>';
-    return;
-  }
-  all.forEach((b) => {
-    const d = document.createElement('div');
-    d.className = 'book-card';
-    d.setAttribute('data-testid', 'entity-card');
-    d.innerHTML = `<h4>${b.title}</h4><p><strong>Автор:</strong>${b.author}</p><p><strong>Год:</strong>${b.year}</p><p><strong>Жанр:</strong>${b.genre}</p><p><strong>Библиотека:</strong>${b.lib}</p><button class="delete-book-btn" data-testid="delete-entity">Удалить</button>`;
-    c.appendChild(d);
-    d.querySelector('.delete-book-btn').onclick = () => {
-      const lib = libs.find((l) => l.name === b.lib);
-      asyncOp(() => lib.removeBook(b.title));
-    };
-  });
-}
-
-function updateSelect() {
-  const s = document.getElementById('library-select');
-  const v = s.value;
-  s.innerHTML = '<option value="">Выберите библиотеку</option>';
-  libs.forEach((l) => {
-    const o = document.createElement('option');
-    o.value = l.name;
-    o.textContent = l.name;
-    s.appendChild(o);
-  });
-  if (v && libs.some((l) => l.name === v)) s.value = v;
+    })),
+  };
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
 }
 
 function renderAll() {
-  renderLibs();
-  renderBooks();
-  updateSelect();
+  renderLibraries();
+  updateLibrarySelect();
+}
+
+function renderLibraries() {
+  const container = document.querySelector('[data-testid="entity-list"]');
+  container.innerHTML = '';
+
+  if (libraries.length === 0) {
+    container.innerHTML = '<p class="empty-state">Нет библиотек. Добавьте первую!</p>';
+    return;
+  }
+
+  libraries.forEach((library, index) => {
+    const card = document.createElement('div');
+    card.className = 'book-card';
+    card.setAttribute('data-testid', 'entity-card');
+
+    const booksHtml = library.books
+      .map(
+        (book, bookIndex) => `
+        <div class="book-item">
+          <div>
+            <strong>${book.title}</strong> — ${book.author} (${book.year}, ${book.genre})
+          </div>
+          <button class="delete-book-btn" data-library-index="${index}" data-book-index="${bookIndex}">
+            Удалить книгу
+          </button>
+        </div>
+      `
+      )
+      .join('');
+
+    card.innerHTML = `
+      <h4>${library.name}</h4>
+      <p><strong>Книг:</strong> ${library.booksCount}</p>
+      <div class="books-inside">
+        ${booksHtml || '<p class="empty-state">Нет книг</p>'}
+      </div>
+      <button class="delete-btn" data-testid="delete-entity" data-library-index="${index}">
+        Удалить библиотеку
+      </button>
+    `;
+    container.appendChild(card);
+
+    card.querySelector('.delete-btn').addEventListener('click', () => {
+      asyncOp(() => {
+        libraries.splice(index, 1);
+      });
+    });
+
+    card.querySelectorAll('.delete-book-btn').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const libraryIndex = Number(btn.dataset.libraryIndex);
+        const bookIndex = Number(btn.dataset.bookIndex);
+        asyncOp(() => {
+          const title = libraries[libraryIndex].books[bookIndex].title;
+          libraries[libraryIndex].removeBook(title);
+        });
+      });
+    });
+  });
+}
+
+function updateLibrarySelect() {
+  const select = document.getElementById('library-select');
+  const currentValue = select.value;
+  select.innerHTML = '<option value="">Выберите библиотеку</option>';
+
+  libraries.forEach((library) => {
+    const option = document.createElement('option');
+    option.value = library.name;
+    option.textContent = library.name;
+    select.appendChild(option);
+  });
+
+  if (currentValue && libraries.some((lib) => lib.name === currentValue)) {
+    select.value = currentValue;
+  }
 }
 
 function setup() {
-  document.getElementById('book-form').onsubmit = (e) => {
+  const libraryForm = document.getElementById('library-form');
+  libraryForm.addEventListener('submit', (e) => {
     e.preventDefault();
-    const f = new FormData(e.target);
-    const lib = libs.find((l) => l.name === f.get('librarySelect'));
-    if (!lib) {
+    const formData = new FormData(e.target);
+    const name = formData.get('name');
+    if (!name.trim()) {
+      alert('Введите название библиотеки');
+      return;
+    }
+    asyncOp(() => {
+      libraries.push(new Library(name));
+    });
+    e.target.reset();
+  });
+
+  const bookForm = document.getElementById('book-form');
+  bookForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const libraryName = formData.get('librarySelect');
+    const library = libraries.find((lib) => lib.name === libraryName);
+    if (!library) {
       alert('Выберите библиотеку');
       return;
     }
-    asyncOp(() =>
-      lib.addBook(
+    asyncOp(() => {
+      library.addBook(
         new Book(
-          f.get('title'),
-          f.get('author'),
-          f.get('year'),
-          f.get('genre'),
-        ),
-      ),
-    );
+          formData.get('title'),
+          formData.get('author'),
+          formData.get('year'),
+          formData.get('genre')
+        )
+      );
+    });
     e.target.reset();
-  };
-  document.getElementById('library-form').onsubmit = (e) => {
-    e.preventDefault();
-    const f = new FormData(e.target);
-    const n = f.get('libraryName');
-    if (!n.trim()) {
-      alert('Введите название');
-      return;
-    }
-    asyncOp(() => libs.push(new Library(n)));
-    e.target.reset();
-  };
+  });
 }
 
-function asyncOp(fn) {
-  return new Promise((r) =>
+function asyncOp(operation) {
+  return new Promise((resolve) => {
     setTimeout(() => {
-      fn();
+      operation();
       save();
       renderAll();
-      r();
-    }, DELAY),
-  );
+      resolve();
+    }, ASYNC_DELAY);
+  });
 }
